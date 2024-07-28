@@ -1,3 +1,7 @@
+provider "aws" {
+  region = var.region
+}
+
 resource "aws_rds_cluster_parameter_group" "aurora_parameters" {
   name   = "aurora-cluster-params"
   family = "aurora-mysql5.7"
@@ -20,8 +24,9 @@ resource "aws_rds_cluster" "aurora_cluster" {
   skip_final_snapshot     = true
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora_parameters.id
   vpc_security_group_ids  = [aws_security_group.db_sg.id]
+  db_subnet_group_name    = aws_db_subnet_group.aurora_subnet_group.name
 
-  depends_on = [aws_rds_subnet_group.aurora_subnet_group]
+  depends_on = [aws_db_subnet_group.aurora_subnet_group]
 }
 
 resource "aws_rds_cluster_instance" "aurora_instances" {
@@ -57,7 +62,7 @@ resource "aws_security_group" "db_sg" {
   vpc_id = var.vpc_id
 }
 
-resource "aws_rds_subnet_group" "aurora_subnet_group" {
+resource "aws_db_subnet_group" "aurora_subnet_group" {
   name       = "aurora-subnet-group"
   subnet_ids = var.subnet_ids
 }
