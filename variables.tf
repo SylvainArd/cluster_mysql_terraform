@@ -60,3 +60,9 @@ variable "ami_id" {
   type        = string
   default     = "ami-0c55b159cbfafe1f0"  # Default to Amazon Linux 2 AMI
 }
+
+
+variable "public_key" {
+  description = "The SSH public key"
+  type        = string
+}

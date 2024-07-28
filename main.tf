@@ -15,7 +15,7 @@ resource "aws_rds_cluster_parameter_group" "aurora_parameters" {
 resource "aws_rds_cluster" "aurora_cluster" {
   cluster_identifier      = var.db_cluster_identifier
   engine                  = "aurora-mysql"
-  engine_version          = "5.7.mysql_aurora.2.08.1"
+  engine_version          = "5.7.mysql_aurora.2.11.1"
   master_username         = var.db_user
   master_password         = var.db_password
   database_name           = var.db_name
@@ -67,10 +67,17 @@ resource "aws_db_subnet_group" "aurora_subnet_group" {
   subnet_ids = var.subnet_ids
 }
 
+
+resource "aws_key_pair" "deployer" {
+  key_name   = var.key_name
+  public_key = var.public_key
+}
+
+
 resource "aws_instance" "web" {
   ami           = var.ami_id
   instance_type = "t2.micro"
-  key_name      = var.key_name
+  key_name      = aws_key_pair.deployer.key_name
   vpc_security_group_ids = [aws_security_group.web_sg.id]
   subnet_id     = var.subnet_id
 
