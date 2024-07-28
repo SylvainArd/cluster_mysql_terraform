@@ -84,7 +84,7 @@ resource "aws_instance" "web" {
   user_data = <<-EOF
               #!/bin/bash
               sudo yum update -y
-              sudo yum install -y php php-mysqlnd httpd mariadb-server
+              sudo yum install -y php php-mysqlnd httpd
               sudo systemctl start httpd
               sudo systemctl enable httpd
               sudo chown -R ec2-user:ec2-user /var/www/html
